@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#define int long long
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
     }
     
     int size(){
-        return this==NULL ? 0 : subtreeSize;
+        return (!this) ? 0 : subtreeSize;
     }
 
     void recalc(){
@@ -86,19 +87,23 @@ Treap* rangeAdd(Treap* t, int l, int r, int toAdd){
     return merge(a[0],merge(b[0],b[1]));
 }
 
-int main(){
-    int n; cin >> n;
+int rangeSum(Treap* t, int l, int r){
+    vector<Treap*> a=split(t,l), b=split(a[1],r-l+1);
+    int ans=b[0]->sum;
+    t=merge(a[0],merge(b[0],b[1]));
+    return ans;
+}
+
+signed main(){
+    int n, q; cin >> n >> q;
     int a[n];
     for(int i=0;i<n;i++) cin >> a[i];
     Treap* t=NULL;
     for(int i=0;i<n;i++){
         t=merge(t,new Treap(a[i]));
     }
-    // The indexes are in 0-based indexing.
-    t=rangeAdd(t,1,2,4);
-    for(int i=0;i<n;i++){
-        vector<Treap*> temp=split(t,1);
-        cout << temp[0]->data << " ";
-        t=temp[1];
+    while(q--){
+        int l, r; cin >> l >> r;
+        cout << rangeSum(t,l-1,r-1) << "\n";
     }
 }
